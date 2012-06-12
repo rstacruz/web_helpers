@@ -143,7 +143,6 @@ module HeadTagsHelper
   #
   def viewport_tag(options={})
     style = options.map { |k, v| "#{k}=#{v}" }.join(', ')
-    "<meta name='viewport' content='#{style}' />"
 
     tag :meta, :name => 'viewport', :content => style
   end
@@ -210,7 +209,7 @@ module HeadTagsHelper
     tag :link, { :rel => 'canonical', :href => url }.merge(options)
   end
 
-  # Defines an alterante URL for the current page.
+  # Defines an alternate URL for the current page.
   #
   #     != alternate_link_tag 'http://foo.com/index.gb.html', hreflang: 'de-AT'
   #
@@ -229,7 +228,7 @@ module HeadTagsHelper
   #     != ios_hide_address_bar_script
   #
   def ios_hide_address_bar_script
-    script = 'window.addEventListener("load",function() { setTimeout(function(){ window.scrollTo(0, 1); }, 0); });'
+    script = 'window.addEventListener("load",function(){setTimeout(function(){window.scrollTo(0,1);},0);})'
     content_tag :script, script
   end
 end
