@@ -1,19 +1,22 @@
 # A bunch of <head> tags you'll want to often use.
 #
-# Sources:
+# Sources
 #
 # * Safari HTML reference: http://developer.apple.com/library/safari/documentation/appleapplications/reference/SafariHTMLRef/Articles/MetaTags.html
 # * Viewport meta tag @ MDN: https://developer.mozilla.org/en/Mobile/Viewport_meta_tag
 #
-# Example
+# Common example for web apps
 #
 #   %head
 #     != ios_viewport_fixed_tag
 #     != ios_status_bar_tag 'black'
 #     != ios_touch_icon_tag '/icon.png', glossy: true
 #     != ios_fullscreen_tag
+#     != ios_hide_address_bar
 #
-#     != favicon_tag 'favicon.ico'
+#  For all other sites, you might want to use
+#
+#     != favicon_tag '/favicon.ico'
 #     != canonical_link_tag 'http://foo.com/index.html'
 #     != alternate_link_tag 'http://foo.com/index.gb.html', hreflang: 'de-AT'
 #
@@ -21,6 +24,7 @@
 #
 module HeadTagsHelper
   # Sets the icon to be shown when the app is pinned to the home screen.
+  #
   # You may pass `glossy: true` to make iOS put in the default gloss.
   # Make the icons in 114 x 114px.
   def ios_touch_icon_tag(url, options={})
@@ -82,13 +86,20 @@ module HeadTagsHelper
 
   # When the app is pinned to the home screen, it ensures it's loaded without
   # the Mobile Safari chrome.
-  # http://developer.apple.com/library/safari/navigation/
+  #
+  # See the Mobile Safari docs.
   def ios_fullscreen_tag
     tag :link, :name => 'apple-mobile-web-app-capable', :content => 'yes'
   end
 
-  def ios_status_bar_tag(options={})
-    style = case options.delete(:style).to_s
+  # Defines the status bar style for iOS when the app is pinned to the home screen.
+  #
+  #     != ios_status_bar_tag 'grey'
+  #     != ios_status_bar_tag 'black'
+  #     != ios_status_bar_tag 'translucent'
+  #
+  def ios_status_bar_tag(style, options={})
+    content = case style
       when 'grey' then 'default'
       when 'black' then 'black'
       when 'translucent' then 'black-translucent'
@@ -96,7 +107,7 @@ module HeadTagsHelper
     end
 
     name = 'apple-mobile-web-app-status-bar-style'
-    tag :meta, { :name => name, :content => style }.merge(options)
+    tag :meta, { :name => name, :content => contnet }.merge(options)
   end
 
   # Changes the logical window size used when displaying a page on iOS.
@@ -107,6 +118,9 @@ module HeadTagsHelper
   # Supported on at least Mobile Safari and Fennec.
   #
   # See the Safari HTML reference for details.
+  #
+  #     != viewport_tag 'width' => 'device-width', 'initial-scale' => '2.4'
+  #
   def viewport_tag(options={})
     style = options.map { |k, v| "#{k}=#{v}" }.join(', ')
     "<meta name='viewport' content='#{style}' />"
@@ -114,6 +128,11 @@ module HeadTagsHelper
     tag :meta, :name => 'viewport', :content => style
   end
 
+  # Optimize the viewport for iOS. Makes the page load with the right scale and
+  # ensures portait/landscape switching doesn't affect scaling.
+  #
+  #     != ios_viewport_tag
+  #
   def ios_viewport_tag(options={})
     defaults = {
       'width' => 'device-width',
@@ -124,6 +143,11 @@ module HeadTagsHelper
     viewport defaults.merge(options)
   end
 
+  # Optimize the viewport for iOS apps. Prevents the user from pinch-zooming
+  # the viewport.
+  #
+  #     != ios_viewport_fixed_tag
+  #
   def ios_viewport_fixed_tag(options={})
     defaults = { 'user-scalable' => 'no' }
     ios_viewport defaults.merge(options)
@@ -131,7 +155,10 @@ module HeadTagsHelper
 
   # Declares a favicon.
   # Seems redundant, but some SEO reports say this brings up your page speed score.
-  def favicon_tag(url, options={})
+  #
+  #     != favicon_tag '/favicon.ico'
+  #
+  def favicon_tag(url='/favicon.ico', options={})
     mime_type = options.delete('type')
     mime_type ||= 'image/png'  if url.include?('.png')
     mime_type ||= 'image/x-icon'
@@ -161,11 +188,11 @@ module HeadTagsHelper
 
   # Hide the address bar on page load.
   #
-  # Personally, I prefer to inline this rather than put in in the scripts. This
-  # way, the address bar is hidden even before scripts are loaded, allowing you
-  # the opportunity to (for example) show a preloader.
+  # Personally, I prefer to this script to be inline rather than be put in the
+  # external scripts. This way, the address bar is hidden even before scripts
+  # are loaded, allowing you the opportunity to (for example) show a preloader.
   #
-  # http://davidwalsh.name/hide-address-bar
+  # See http://davidwalsh.name/hide-address-bar.
   def ios_hide_address_bar
     script = 'window.addEventListener("load",function() { setTimeout(function(){ window.scrollTo(0, 1); }, 0); });'
     content_tag :script, script
