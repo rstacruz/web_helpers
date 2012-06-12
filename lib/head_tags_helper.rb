@@ -32,6 +32,10 @@ module HeadTagsHelper
   #
   # You may pass `glossy: true` to make iOS put in the default gloss.
   # Make the icons in 114 x 114px.
+  #
+  #     != ios_touch_icon_tag '/touch.png'
+  #     != ios_touch_icon_tag '/touch.png', glossy: true
+  #
   def ios_touch_icon_tag(url, options={})
     rel = options.delete(:glossy) ? 'apple-touch-icon' : 'apple-touch-icon-precomposed'
 
@@ -40,14 +44,26 @@ module HeadTagsHelper
 
   # When the app is pinned to the home screen, sets the splash screen to be
   # shown while the browser loads.
-  # Make this in 640px x 920px.
+  # Make this in 640px x 920px (or 320 x 460 for non retina).
+  #
+  #     != ios_splash_tag '/splash.png'
+  #
+  # Or even better:
+  #
+  #     != iphone_splash_tag '/splash_iphone.png'
+  #     != iphone_retina_splash_tag '/splash_iphone@2x.png'
+  #
+  #     != ipad_portrait_splash_tag '/splash_ipad_portrait.png'
+  #     != ipad_landscape_splash_tag '/splash_ipad_landscape.png'
+  #
+  #     != ipad_retina_portrait_splash_tag '/splash_ipad_portrait@2x.png'
+  #     != ipad_retina_landscape_splash_tag '/splash_ipad_landscape@2x.png'
+  #
   def ios_splash_tag(url, options={})
     rel = 'apple-touch-startup-image'
 
     tag :link, { :rel => rel, :href => url }.merge(options)
   end
-
-  # ----
 
   def iphone_splash_tag(url)
     ios_splash_tag url, :media => '(max-device-width: 480px)'
@@ -61,8 +77,6 @@ module HeadTagsHelper
     ios_splash_tag url, :media => '(max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)'
   end
 
-  # ----
-
   def ipad_portrait_splash_tag(url)
     ios_splash_tag url, :media => '(min-device-width: 768px) and (orientation: portrait)'
   end
@@ -70,8 +84,6 @@ module HeadTagsHelper
   def ipad_landscape_splash_tag(url)
     ios_splash_tag url, :media => '(min-device-width: 768px) and (orientation: landscape)'
   end
-
-  # ----
 
   def ipad_nonretina_portrait_splash_tag(url)
     ios_splash_tag url, :media => '(min-device-width: 768px) and (orientation: portrait) and not (-webkit-min-device-pixel-ratio: 2)'
@@ -93,6 +105,9 @@ module HeadTagsHelper
   # the Mobile Safari chrome.
   #
   # See the Mobile Safari docs.
+  #
+  #     != ios_fullscreen_tag
+  #
   def ios_fullscreen_tag
     tag :link, :name => 'apple-mobile-web-app-capable', :content => 'yes'
   end
@@ -172,21 +187,33 @@ module HeadTagsHelper
   end
 
   # Link to the next page.
+  #
+  #     != next_link_tag '/?page=3'
+  #
   def next_link_tag(url, options={})
     tag :link, { :rel => 'next', :href => url }.merge(options)
   end
 
   # Link to the previous page.
+  #
+  #     != next_link_tag '/?page=1'
+  #
   def prev_link_tag(url, options={})
     tag :link, { :rel => 'prev', :href => url }.merge(options)
   end
 
   # Defines the canonical URL for the current page. Great for SEO.
+  #
+  #     != canonical_link_tag 'http://foo.com/page.html'
+  #
   def canonical_link_tag(url, options={})
     tag :link, { :rel => 'canonical', :href => url }.merge(options)
   end
 
   # Defines an alterante URL for the current page.
+  #
+  #     != alternate_link_tag 'http://foo.com/index.gb.html', hreflang: 'de-AT'
+  #
   def alternate_link_tag(url, options={})
     tag :link, { :rel => 'alternate', :href => url }.merge(options)
   end
@@ -198,6 +225,9 @@ module HeadTagsHelper
   # are loaded, allowing you the opportunity to (for example) show a preloader.
   #
   # See http://davidwalsh.name/hide-address-bar
+  #
+  #     != ios_hide_address_bar_script
+  #
   def ios_hide_address_bar_script
     script = 'window.addEventListener("load",function() { setTimeout(function(){ window.scrollTo(0, 1); }, 0); });'
     content_tag :script, script
