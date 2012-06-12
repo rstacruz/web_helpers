@@ -4,6 +4,11 @@
 #
 # * Safari HTML reference: http://developer.apple.com/library/safari/documentation/appleapplications/reference/SafariHTMLRef/Articles/MetaTags.html
 # * Viewport meta tag @ MDN: https://developer.mozilla.org/en/Mobile/Viewport_meta_tag
+# * iOS startup images: http://miniapps.co.uk/blog/post/ios-startup-images-using-css-media-queries
+#
+# Other relevant reading
+#
+# * iOS stay-standalone script: https://gist.github.com/1042026
 #
 # Common example for web apps
 #
@@ -12,7 +17,7 @@
 #     != ios_status_bar_tag 'black'
 #     != ios_touch_icon_tag '/icon.png', glossy: true
 #     != ios_fullscreen_tag
-#     != ios_hide_address_bar
+#     != ios_hide_address_bar_script
 #
 #  For all other sites, you might want to use
 #
@@ -192,8 +197,8 @@ module HeadTagsHelper
   # external scripts. This way, the address bar is hidden even before scripts
   # are loaded, allowing you the opportunity to (for example) show a preloader.
   #
-  # See http://davidwalsh.name/hide-address-bar.
-  def ios_hide_address_bar
+  # See http://davidwalsh.name/hide-address-bar
+  def ios_hide_address_bar_script
     script = 'window.addEventListener("load",function() { setTimeout(function(){ window.scrollTo(0, 1); }, 0); });'
     content_tag :script, script
   end
