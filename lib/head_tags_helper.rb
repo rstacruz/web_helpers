@@ -38,6 +38,48 @@ module HeadTagsHelper
     tag :link, { :rel => rel, :href => url }.merge(options)
   end
 
+  # ----
+
+  def iphone_splash_tag(url)
+    ios_splash_tag url, :media => '(max-device-width: 480px)'
+  end
+
+  def iphone_nonretina_splash_tag(url)
+    ios_splash_tag url, :media => '(max-device-width: 480px) and not (-webkit-min-device-pixel-ratio: 2)'
+  end
+
+  def iphone_retina_splash_tag(url)
+    ios_splash_tag url, :media => '(max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)'
+  end
+
+  # ----
+
+  def ipad_portrait_splash_tag(url)
+    ios_splash_tag url, :media => '(min-device-width: 768px) and (orientation: portrait)'
+  end
+
+  def ipad_landscape_splash_tag(url)
+    ios_splash_tag url, :media => '(min-device-width: 768px) and (orientation: landscape)'
+  end
+
+  # ----
+
+  def ipad_nonretina_portrait_splash_tag(url)
+    ios_splash_tag url, :media => '(min-device-width: 768px) and (orientation: portrait) and not (-webkit-min-device-pixel-ratio: 2)'
+  end
+
+  def ipad_nonretina_landscape_splash_tag(url)
+    ios_splash_tag url, :media => '(min-device-width: 768px) and (orientation: landscape) and not (-webkit-min-device-pixel-ratio: 2)'
+  end
+
+  def ipad_retina_portrait_splash_tag(url)
+    ios_splash_tag url, :media => '(min-device-width: 768px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2)'
+  end
+
+  def ipad_retina_landscape_splash_tag(url)
+    ios_splash_tag url, :media => '(min-device-width: 768px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2)'
+  end
+
   # When the app is pinned to the home screen, it ensures it's loaded without
   # the Mobile Safari chrome.
   # http://developer.apple.com/library/safari/navigation/
@@ -115,5 +157,17 @@ module HeadTagsHelper
   # Defines an alterante URL for the current page.
   def alternate_link_tag(url, options={})
     tag :link, { :rel => 'alternate', :href => url }.merge(options)
+  end
+
+  # Hide the address bar on page load.
+  #
+  # Personally, I prefer to inline this rather than put in in the scripts. This
+  # way, the address bar is hidden even before scripts are loaded, allowing you
+  # the opportunity to (for example) show a preloader.
+  #
+  # http://davidwalsh.name/hide-address-bar
+  def ios_hide_address_bar
+    script = 'window.addEventListener("load",function() { setTimeout(function(){ window.scrollTo(0, 1); }, 0); });'
+    content_tag :script, script
   end
 end
