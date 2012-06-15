@@ -127,7 +127,7 @@ module HeadTagsHelper
     end
 
     name = 'apple-mobile-web-app-status-bar-style'
-    tag :meta, { :name => name, :content => contnet }.merge(options)
+    tag :meta, { :name => name, :content => content }.merge(options)
   end
 
   # Changes the logical window size used when displaying a page on iOS.
@@ -159,7 +159,7 @@ module HeadTagsHelper
       'maximum-scale' => '1'      # Prevents rescale on portrait/landscape switch
     }
 
-    viewport defaults.merge(options)
+    viewport_tag defaults.merge(options)
   end
 
   # Optimize the viewport for iOS apps. Prevents the user from pinch-zooming
@@ -169,7 +169,7 @@ module HeadTagsHelper
   #
   def ios_viewport_fixed_tag(options={})
     defaults = { 'user-scalable' => 'no' }
-    ios_viewport defaults.merge(options)
+    ios_viewport_tag defaults.merge(options)
   end
 
   # Declares a favicon.
