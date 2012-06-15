@@ -231,4 +231,31 @@ module HeadTagsHelper
     script = 'window.addEventListener("load",function(){setTimeout(function(){window.scrollTo(0,1);},0);})'
     content_tag :script, script
   end
+
+  # Force IE to render with the latest renderer version it can use.
+  # Note that this is discouraged; it's best to use ie_version with the
+  # specific versions of IE you've tested with.
+  #
+  # See http://www.alistapart.com/articles/beyonddoctype
+  #
+  # Also see http://www.chromium.org/developers/how-tos/chrome-frame-getting-started
+  #
+  #     != ie_edge_tag
+  #
+  def ie_edge_tag
+    ie_version_tag 'IE=edge,chrome=1'
+  end
+
+  # Force IE to render with a specific version.
+  #
+  # As of time of writing, you may specify 5, 7, 8, 9, 10, edge, or EmulateIE7 for IE.
+  #
+  # http://msdn.microsoft.com/en-us/library/cc288325(v=VS.85).aspx
+  #
+  #     != ie_version_tag 'IE=8'
+  #     != ie_version_tag 'IE=8, IE=9, IE=10, chrome=1'
+  #
+  def ie_version_tag(content)
+    tag :meta, :'http-equiv' => 'X-UA-Compatible', :content => content
+  end
 end
