@@ -11,7 +11,7 @@ module GoogleAnalyticsHelper
   # Google's Event Actions guide for more info on event actions.
   #
   #     = analytics_tag 'UA-28347981-1'
-  #     = analytics_tag 'UA-28347981-1', ['_trackEvent', 'Download']
+  #     = analytics_tag 'UA-28347981-1', ['_setVar', 'exclusion']
   #
   def analytics_tag(id, *actions)
     script = %{
