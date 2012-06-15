@@ -10,21 +10,25 @@ module GoogleAnalyticsHelper
   # You can provide a custom `actions` array, which is an array of arrays.  See
   # Google's Event Actions guide for more info on event actions.
   #
+  # Based on the optimized version here: http://mathiasbynens.be/notes/async-analytics-snippet
+  #
+  # Also see http://jsperf.com/async-analytics-snippet
+  #
   #     = analytics_tag 'UA-28347981-1'
   #     = analytics_tag 'UA-28347981-1', ['_setVar', 'exclusion']
   #
   def analytics_tag(id, *actions)
-    script = %{
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', #{id.to_json}]);
-      _gaq.push(['_trackPageview']);
-      #{actions.map { |a| "_gaq.push(#{[*a].to_json});" }}
+    gaq = [ ['_setAccount', id], ['_trackPageview'], *actions ]
 
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
+    script = %{
+      var _gaq=#{gaq.to_json};
+      (function(d) {
+        var g=d.createElement(t),
+            s=d.getElementsByTagName(t)[0];
+        g.async=1;
+        g.src=('https:'==location.protocol?'https://ssl':'http://www')+'.google-analytics.com/ga.js';
+        s.parentNode.insertBefore(g,s);
+      }(document,'script'));
     }.strip.gsub(/\n\s*/, '')
 
     content_tag :script, script
@@ -40,10 +44,7 @@ module GoogleAnalyticsHelper
   #     = analytics_action_tag ['_trackEvent', 'Download'], ['_trackEvent', 'Play']
   #
   def analytics_action_tag(*actions)
-    script = %{
-      var _gaq = _gaq || [];
-      #{actions.map { |a| "_gaq.push(#{[*a].to_json});" }}
-    }.strip.gsub(/\n\s*/, '')
+    script = actions.map { |a| "_gaq.push(#{[*a].to_json});" }.join("")
 
     content_tag :script, script
   end
