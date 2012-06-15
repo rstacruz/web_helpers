@@ -24,11 +24,11 @@ module GoogleAnalyticsHelper
 
     script = %{
       var _gaq=#{gaq.to_json};
-      (function(d) {
+      (function(d,t) {
         var g=d.createElement(t),
             s=d.getElementsByTagName(t)[0];
         g.async=1;
-        g.src=('https:'==location.protocol?'https://ssl':'http://www')+'.google-analytics.com/ga.js';
+        g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
         s.parentNode.insertBefore(g,s);
       }(document,'script'));
     }.strip.gsub(/\n\s*/, '')
