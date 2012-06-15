@@ -3,6 +3,8 @@
 # Resources:
 #
 #  * Event Actions guide: https://developers.google.com/analytics/devguides/collection/gajs/eventTrackerGuide#Actions
+#  * Optimized Analytics helper: http://mathiasbynens.be/notes/async-analytics-snippet
+#  * JSPerf for optimizations: http://jsperf.com/async-analytics-snippet
 #
 module GoogleAnalyticsHelper
   # Adds a Google Analytics tracking tag.
