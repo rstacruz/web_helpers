@@ -1,18 +1,19 @@
 module WebfontsHelper
-  # <%= webfonts google: { families: [ 'PT Sans:400,700' ] } %>
-  # <%= webfonts google: { families: [ 'PT Sans:400,700', 'Exo:100:latin' ] } %>
+  # Embeds webfonts.
+  #
+  #   <%= webfonts google: { families: [ 'PT Sans:400,700' ] } %>
+  #   <%= webfonts google: { families: [ 'PT Sans:400,700', 'Exo:100:latin' ] } %>
+  #
+  # This has been optimized to cut down on some bytes.
   def webfonts(config={})
     %{<script>
-    WebFontConfig = #{config.to_json};
-    (function() {
-      var wf = document.createElement('script');
-      wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-          '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-      wf.type = 'text/javascript';
-      wf.async = 'true';
-      var s = document.getElementsByTagName('script')[0];
-      s.parentNode.insertBefore(wf, s);
-    })();
+    WebFontConfig=#{config.to_json};
+    (function(d,s){
+      var w=d.createElement(s);
+      w.src='//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+      w.async=1;
+      d.getElementsByTagName(s)[0].parentNode.insertBefore(w,s);
+    })(document,'script');
     </script>}.gsub(/\n\s*/, '')
   end
 end
