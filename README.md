@@ -2,10 +2,10 @@ Web helpers
 ===========
 
 A bunch of Ruby web helpers for you to use and enjoy. Works in: Rails,
-[Sinatra][sin]*, [Padrino][pad], [Middleman][mm], or just plain old Ruby*.
+[Sinatra][sin]\*, [Padrino][pad], [Middleman][mm], or just plain old Ruby\*.
 
-* = Some helpers need the `tag` and `content_tag` helper. Rails, ActionView, et 
-  al, already have these, but otherwise, get them from [Padrino Helpers][ph].
+\* = Some helpers need the `tag` and `content_tag` helper. Rails, ActionView, et 
+al, already have these, but otherwise, get them from [Padrino Helpers][ph].
 
 [sin]: http://sinatrarb.com
 [pad]: http://www.padrinorb.com
