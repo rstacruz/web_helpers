@@ -17,9 +17,10 @@ module WebfontsHelper
     WebFontConfig=#{config.to_json};
     (function(d,s){
       var w=d.createElement(s);
-      w.src='//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+      w.src='http://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
       w.async=1;
-      d.getElementsByTagName(s)[0].parentNode.insertBefore(w,s);
+      var c=d.getElementsByTagName(s)[0];
+      c.parentNode.insertBefore(w,c);
     })(document,'script');
     </script>}.gsub(/\n\s*/, '')
   end
@@ -59,6 +60,6 @@ end
 #
 #     WebFontConfig={google:{families:['Tangerine','Cantarell']}};
 #     (function(d,s){var w=d.createElement(s);w.src=
-#     '//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';w.async=1;d.
-#     getElementsByTagName(s)[0].parentNode.insertBefore(w,s);})
+#     '//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';w.async=1;var
+#     c=d.getElementsByTagName(s)[0];c.parentNode.insertBefore(w,c);})
 #     (document,'script');
