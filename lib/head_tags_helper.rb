@@ -229,6 +229,7 @@ module HeadTagsHelper
   #
   def ios_hide_address_bar_script
     script = 'window.addEventListener("load",function(){setTimeout(function(){window.scrollTo(0,1);},0);})'
+    script = script.html_safe  if script.respond_to?(:html_safe)
     content_tag :script, script
   end
 
