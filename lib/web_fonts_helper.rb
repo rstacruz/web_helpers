@@ -1,18 +1,18 @@
-module WebfontsHelper
-  # Embeds webfonts.
+module WebFontsHelper
+  # Embeds web fonts.
   #
-  # More information abouth Google's webfont loader here:
+  # More information abouth Google's web font loader here:
   # https://developers.google.com/webfonts/docs/webfont_loader
   #
   # Common examples:
   #
   #     <!-- Load from Google -->
-  #     <%= webfonts google: { families: [ 'PT Sans:400,700' ] } %>
-  #     <%= webfonts google: { families: [ 'PT Sans:400,700', 'Exo:100:latin' ] } %>
+  #     <%= web_fonts google: { families: [ 'PT Sans:400,700' ] } %>
+  #     <%= web_fonts google: { families: [ 'PT Sans:400,700', 'Exo:100:latin' ] } %>
   #
   # This has been optimized to cut down on some bytes.
   #
-  def webfonts(config={})
+  def web_fonts(config={})
     %{<script>
     WebFontConfig=#{config.to_json};
     (function(d,s){
