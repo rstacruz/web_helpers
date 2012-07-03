@@ -109,7 +109,7 @@ module HeadTagsHelper
   #     != ios_fullscreen_tag
   #
   def ios_fullscreen_tag
-    tag :link, :name => 'apple-mobile-web-app-capable', :content => 'yes'
+    tag :meta, :name => 'apple-mobile-web-app-capable', :content => 'yes'
   end
 
   # Defines the status bar style for iOS when the app is pinned to the home screen.
