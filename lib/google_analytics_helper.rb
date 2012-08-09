@@ -7,6 +7,16 @@
 #  * JSPerf for optimizations: http://jsperf.com/async-analytics-snippet
 #
 module GoogleAnalyticsHelper
+  # Returns the Analytics ID.
+  def analytics_id
+    "UA-xxxxxx-xx" # override me
+  end
+
+  # Adds the default analytics tag.
+  def analytics_track_pageview_tag
+    analytics_tag ['_trackPageview']
+  end
+
   # Adds a Google Analytics tracking tag.
   #
   # You can provide a custom `actions` array, which is an array of arrays.  See
@@ -16,23 +26,30 @@ module GoogleAnalyticsHelper
   #
   # Also see http://jsperf.com/async-analytics-snippet
   #
-  #     = analytics_tag 'UA-28347981-1'
-  #     = analytics_tag 'UA-28347981-1', ['_setVar', 'exclusion']
+  #     = analytics_tag ['_trackPageview']
+  #     = analytics_tag ['_setVar', 'exclusion'], ['_trackPageview']
   #
-  def analytics_tag(id, *actions)
-    gaq = [ ['_setAccount', id], ['_trackPageview'], *actions ]
+  def analytics_tag(*actions)
+    id = analytics_id
+    gaq = [ ['_setAccount', id] ] + actions
 
-    script = %{
-      var _gaq=#{gaq.to_json};
-      (function(d,t) {
-        var g=d.createElement(t),
-            s=d.getElementsByTagName(t)[0];
-        g.async=1;
-        g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-        s.parentNode.insertBefore(g,s);
-      }(document,'script'));
-    }.strip.gsub(/\n\s*/, '')
+    script = if id
+      %{
+        var _gaq=#{gaq.to_json};
+        (function(d,t) {
+          var g=d.createElement(t),
+              s=d.getElementsByTagName(t)[0];
+          g.async=1;
+          g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+          s.parentNode.insertBefore(g,s);
+        }(document,'script'));
+      }.strip.gsub(/\n\s*/, '')
 
+    else
+      %{var _gaq=#{gaq.to_json}}
+    end
+
+    script = script.html_safe  if script.respond_to?(:html_safe)
     content_tag :script, script
   end
 
@@ -47,6 +64,7 @@ module GoogleAnalyticsHelper
   #
   def analytics_action_tag(*actions)
     script = actions.map { |a| "_gaq.push(#{[*a].to_json});" }.join("")
+    script = script.html_safe  if script.respond_to?(:html_safe)
 
     content_tag :script, script
   end
