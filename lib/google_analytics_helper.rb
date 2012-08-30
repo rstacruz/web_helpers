@@ -12,8 +12,15 @@ module GoogleAnalyticsHelper
     "UA-xxxxxx-xx" # override me
   end
 
+  # Checks if Analytics should be used.
+  # Override this to, say, disable analytics for admin users.
+  def use_analytics?
+    !! analytics_id
+  end
+
   # Adds the default analytics tag.
-  def analytics_track_pageview_tag
+  # Override this to, say, add _setDomainName or set custom GA variables.
+  def default_analytics_tag
     analytics_tag ['_trackPageview']
   end
 
@@ -31,12 +38,12 @@ module GoogleAnalyticsHelper
   #
   def analytics_tag(*actions)
     id = analytics_id
-    gaq = [ ['_setAccount', id] ] + actions
+    gaq = [['_setAccount', id]] + actions
 
-    script = if id
+    script = if use_analytics?
       %{
-        var _gaq=#{gaq.to_json};
-        (function(d,t) {
+        _gaq=#{gaq.to_json};
+        (function(d,t){
           var g=d.createElement(t),
               s=d.getElementsByTagName(t)[0];
           g.async=1;
@@ -46,7 +53,7 @@ module GoogleAnalyticsHelper
       }.strip.gsub(/\n\s*/, '')
 
     else
-      %{var _gaq=#{gaq.to_json}}
+      %{_gaq=#{gaq.to_json}}
     end
 
     script = script.html_safe  if script.respond_to?(:html_safe)

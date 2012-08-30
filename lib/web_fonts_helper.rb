@@ -1,4 +1,8 @@
+# # Helpers: WebFonts
+# Google web fonts loader.
+
 module WebFontsHelper
+  # ### web_fonts
   # Embeds web fonts.
   #
   # More information abouth Google's web font loader here:
@@ -11,6 +15,11 @@ module WebFontsHelper
   #     <%= web_fonts google: { families: [ 'PT Sans:400,700', 'Exo:100:latin' ] } %>
   #
   # This has been optimized to cut down on some bytes.
+  #
+  # More examples:
+  #
+  #     = web_fonts typekit: { id: 'xyz123' }
+  #     = web_fonts ascender: { key: 'abczxd', families: ['AscenderSans:bold,regular']
   #
   def web_fonts(config={})
     %{<script>
@@ -26,8 +35,7 @@ module WebFontsHelper
   end
 end
 
-# Optimization info
-# -----------------
+# ## Optimization info
 #
 # This optimization was inspired by the Google Analytics script optimization posted here:
 # http://mathiasbynens.be/notes/async-analytics-snippet .
