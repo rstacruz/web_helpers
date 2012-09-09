@@ -17,7 +17,7 @@
 #     != ios_status_bar_tag 'black'
 #     != ios_touch_icon_tag '/icon.png', glossy: true
 #     != ios_fullscreen_tag
-#     != ios_hide_address_bar_script
+#     != mobile_hide_address_bar_script
 #
 #  For all other sites, you might want to use
 #
@@ -225,10 +225,13 @@ module HeadTagsHelper
   #
   # See http://davidwalsh.name/hide-address-bar
   #
-  #     != ios_hide_address_bar_script
+  # This uses the Normalized address bar hiding for iOS & Android,A (c)
+  # @scottjehl MIT License. See: https://github.com/scottjehl/Hide-Address-Bar
   #
-  def ios_hide_address_bar_script
-    script = 'window.addEventListener("load",function(){setTimeout(function(){window.scrollTo(0,1);},0);})'
+  #     != mobile_hide_address_bar_script
+  #
+  def mobile_hide_address_bar_script
+    script = %[(function(a){var b=a.document;if(!location.hash&&a.addEventListener){window.scrollTo(0,1);var c=1,d=function(){return a.pageYOffset||b.compatMode==="CSS1Compat"&&b.documentElement.scrollTop||b.body.scrollTop||0},e=setInterval(function(){b.body&&(clearInterval(e),c=d(),a.scrollTo(0,c===1?0:1))},15);a.addEventListener("load",function(){setTimeout(function(){d()<20&&a.scrollTo(0,c===1?0:1)},0)})}})(this)]
     script = script.html_safe  if script.respond_to?(:html_safe)
     content_tag :script, script
   end
