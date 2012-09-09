@@ -225,13 +225,21 @@ module HeadTagsHelper
   #
   # See http://davidwalsh.name/hide-address-bar
   #
-  # This uses the Normalized address bar hiding for iOS & Android,A (c)
-  # @scottjehl MIT License. See: https://github.com/scottjehl/Hide-Address-Bar
+  # This uses the Normalized address bar hiding script for iOS & Android, (c)
+  # @scottjehl, MIT License. See: https://github.com/scottjehl/Hide-Address-Bar
   #
   #     != mobile_hide_address_bar_script
   #
   def mobile_hide_address_bar_script
-    script = %[(function(a){var b=a.document;if(!location.hash&&a.addEventListener){window.scrollTo(0,1);var c=1,d=function(){return a.pageYOffset||b.compatMode==="CSS1Compat"&&b.documentElement.scrollTop||b.body.scrollTop||0},e=setInterval(function(){b.body&&(clearInterval(e),c=d(),a.scrollTo(0,c===1?0:1))},15);a.addEventListener("load",function(){setTimeout(function(){d()<20&&a.scrollTo(0,c===1?0:1)},0)})}})(this)]
+    script = %[
+      (function(a){var b=a.document;if(!location.hash&&a.addEventListener){
+      window.scrollTo(0,1);var c=1,d=function(){return a.pageYOffset||b.compatMode
+      ==="CSS1Compat"&&b.documentElement.scrollTop||b.body.scrollTop||0},e=
+      setInterval(function(){b.body&&(clearInterval(e),c=d(),a.scrollTo(0,c
+      ===1?0:1))},15);a.addEventListener("load",function(){setTimeout(function
+      (){d()<20&&a.scrollTo(0,c===1?0:1)},0)})}})(this)
+    ].strip.gsub(/\n\s*/, '')
+
     script = script.html_safe  if script.respond_to?(:html_safe)
     content_tag :script, script
   end
