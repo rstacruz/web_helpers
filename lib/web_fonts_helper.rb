@@ -22,16 +22,18 @@ module WebFontsHelper
   #     = web_fonts ascender: { key: 'abczxd', families: ['AscenderSans:bold,regular']
   #
   def web_fonts(config={})
-    %{<script>
+    script = %{<script>
     WebFontConfig=#{config.to_json};
     (function(d,s){
       var w=d.createElement(s);
-      w.src='http://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+      w.src='//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
       w.async=1;
       var c=d.getElementsByTagName(s)[0];
       c.parentNode.insertBefore(w,c);
     })(document,'script');
     </script>}.gsub(/\n\s*/, '')
+    script = script.html_safe  if script.respond_to?(:html_safe)
+    script
   end
 end
 
