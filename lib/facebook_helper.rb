@@ -1,32 +1,41 @@
 module FacebookHelper
-  # Basic script tag for including the Facebook SDK. Needed for Like buttons and such.
-  # Facebook recommends this after the body tag.
+  # Basic script tag for including the Facebook SDK. Needed for Like buttons
+  # and such. Facebook recommends this after the body tag.
   #
-  # - https://developers.facebook.com/docs/reference/plugins/like/
+  #   https://developers.facebook.com/docs/reference/plugins/like/
   #
-  # Example:
+  # This uses the asynchorous version described below.
   #
-  #     <div class="fb-like"
-  #          data-href="http://facebook.com"
-  #          data-send="false"
-  #          data-layout="button_count"
-  #          data-width="100"
-  #          data-show-faces="true">
-  #     </div>
+  #   https://developers.facebook.com/docs/reference/javascript/
   #
-  def facebook_sdk_script
+  def facebook_sdk_script(options={})
+    defaults = {
+      appId: facebook_app_id,
+      status: true,
+      cookie: true,
+      xfbml: true,
+      locale: 'en_US'
+    }
+
+    options = defaults.merge(options)
+    locale = options.delete(:locale)
+
     script = %{
       <div id="fb-root"></div>
       <script>
-      (function(d,s,id){
+      fbAsyncInit=function(){
+        FB.init(#{options.to_json})
+      };
+      !function(d,s,id){
         var js,fjs=d.getElementsByTagName(s)[0];
         if(!d.getElementById(id)){
           js=d.createElement(s);
           js.id=id;
-          js.src="//connect.facebook.net/en_US/all.js#xfbml=1&appId=#{facebook_app_id}";
+          js.async=1;
+          js.src='//connect.facebook.net/#{locale}/all.js';
           fjs.parentNode.insertBefore(js,fjs);
         }
-      }(document,"script","facebook-jssdk"));
+      }(document,'script','facebook-jssdk');
       </script>
     }.strip.gsub(/\n\s*/, '')
 
@@ -34,6 +43,8 @@ module FacebookHelper
     script
   end
 
+
+  # Override me!
   def facebook_app_id
     "182974951074"
   end
